@@ -11,16 +11,16 @@ WITH tab AS (
         -- считаем выручку продавца за всё время
         FLOOR(SUM(p.price * s.quantity)) AS income
     FROM sales AS s
-    -- соединяем таблицы
     INNER JOIN products AS p ON s.product_id = p.product_id
-    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id 
+    -- соединяем таблицы
+    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
     GROUP BY s.sales_person_id, seller
 )
 
 SELECT
     t.seller,
     t.operations,
-    t.income -- итоговый запрос
+    t.income
 FROM tab AS t
 ORDER BY t.income DESC
 LIMIT 10;
@@ -40,7 +40,7 @@ SELECT
     s.seller,
     FLOOR(s.average) AS average_income
 FROM seller_avg AS s
--- условие для выборки продавцов с меньшей средней выручкой
+-- выборка продавцов с меньшей средней выручкой
 WHERE s.average < (SELECT AVG(sa.average) FROM seller_avg AS sa)
 ORDER BY s.average ASC;
 
@@ -70,7 +70,7 @@ ORDER BY d.day_number ASC, d.seller ASC;
 WITH age_groups AS (
     SELECT
         customer_id,
-        -- создаём столбец age_category с тремя диапазонами возрастов
+        -- age_category с тремя диапазонами возрастов
         CASE
             WHEN age BETWEEN 16 AND 25 THEN '16-25'
             WHEN age BETWEEN 26 AND 40 THEN '26-40'
@@ -79,9 +79,9 @@ WITH age_groups AS (
     FROM customers
 )
 
+-- считаем количество человек в каждом диапазоне
 SELECT
     age_category,
-    -- считаем количество человек в каждом диапазоне
     COUNT(*) AS age_count
 FROM age_groups
 GROUP BY age_category
