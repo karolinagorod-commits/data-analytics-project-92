@@ -36,12 +36,12 @@ WITH seller_avg AS (
 )
 
 SELECT
-    seller,
-    FLOOR(average) AS average_income
-FROM seller_avg
+    s.seller,
+    FLOOR(s.average) AS average_income
+FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
-WHERE average < (SELECT AVG(average) FROM seller_avg)
-ORDER BY average ASC;
+WHERE s.average < (SELECT AVG(average) FROM seller_avg)
+ORDER BY s.average ASC;
 
 WITH day_sales AS (
     SELECT
@@ -64,7 +64,7 @@ SELECT
     d.day_of_week,
     d.income
 FROM day_sales AS d
-ORDER BY day_number ASC, seller ASC;
+ORDER BY d.day_number ASC, d.seller ASC;
 
 WITH age_groups AS (
     SELECT
