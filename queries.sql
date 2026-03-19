@@ -40,7 +40,7 @@ SELECT
     FLOOR(s.average) AS average_income
 FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
-WHERE s.average < (SELECT AVG(average) FROM seller_avg)
+WHERE s.average < (SELECT AVG(sa.average) FROM seller_avg AS sa)
 ORDER BY s.average ASC;
 
 WITH day_sales AS (
