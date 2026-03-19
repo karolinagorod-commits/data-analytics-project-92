@@ -11,8 +11,9 @@ WITH tab AS (
         -- считаем выручку продавца за всё время
         FLOOR(SUM(p.price * s.quantity)) AS income
     FROM sales AS s
+    -- соединяем таблицы
     INNER JOIN products AS p ON s.product_id = p.product_id
-    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id -- соединяем таблицы
+    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id 
     GROUP BY s.sales_person_id, seller
 )
 
