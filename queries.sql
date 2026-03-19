@@ -12,14 +12,14 @@ WITH tab AS (
         FLOOR(SUM(p.price * s.quantity)) AS income
     FROM sales AS s
     INNER JOIN products AS p ON s.product_id = p.product_id
-    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
+    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id -- соединяем таблицы
     GROUP BY s.sales_person_id, seller
 )
 
 SELECT
     t.seller,
     t.operations,
-    t.income
+    t.income -- итоговый запрос
 FROM tab AS t
 ORDER BY t.income DESC
 LIMIT 10;
@@ -39,7 +39,7 @@ SELECT
     s.seller,
     FLOOR(s.average) AS average_income
 FROM seller_avg AS s
--- выборка продавцов с меньшей средней выручкой
+-- условие для выборки продавцов с меньшей средней выручкой
 WHERE s.average < (SELECT AVG(sa.average) FROM seller_avg AS sa)
 ORDER BY s.average ASC;
 
@@ -100,9 +100,9 @@ ORDER BY selling_month ASC;
 
 -- отсеиваем дубли покупателей
 SELECT DISTINCT ON (c.customer_id)
+    s.sale_date,
     -- объединяем имя и фамилию
     TRIM(c.first_name) || ' ' || TRIM(c.last_name) AS customer,
-    s.sale_date,
     TRIM(e.first_name) || ' ' || TRIM(e.last_name) AS seller
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
