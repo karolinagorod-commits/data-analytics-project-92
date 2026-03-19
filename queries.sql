@@ -15,14 +15,18 @@ from tab t
 order by income desc
 limit 10;
 
+with tab as (
 select 
 trim(e.first_name) ||' '|| trim(e.last_name) as seller,
-floor(avg(p.price * s.quantity)) as average_income -- считаем среднюю выручку за сделку
+avg(p.price * s.quantity) as average -- считаем среднюю выручку за сделку
 from sales s 
 inner join products p on s.product_id = p.product_id
 inner join employees e on s.sales_person_id = e.employee_id
-group by seller
-order by average_income asc;
+group by seller)
+select seller, floor(average) as average_income
+from tab
+where average < (select avg(average) from tab) -- условие для выборки продавцов с меньшей средней выручкой
+order by average asc;
 
 with tab as(
 select 
