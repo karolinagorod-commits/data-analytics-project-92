@@ -33,7 +33,6 @@ SELECT
 FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
 WHERE s.average < (
-    -- среднее от исходных данных
     SELECT
         AVG(p.price * sa.quantity)
     FROM sales AS sa
