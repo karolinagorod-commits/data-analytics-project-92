@@ -34,9 +34,11 @@ FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
 WHERE s.average < (
     -- среднее от исходных данных
-    SELECT AVG(p.price * sa.quantity)
+    SELECT
+        AVG(p.price * sa.quantity)
     FROM sales AS sa
-    INNER JOIN products AS p ON sa.product_id = p.product_id
+    INNER JOIN products AS p
+        ON sa.product_id = p.product_id
 )
 ORDER BY s.average ASC;
 
@@ -95,6 +97,3 @@ INNER JOIN customers AS c ON s.customer_id = c.customer_id
 WHERE p.price = 0
 -- сортируем по id и первой дате покупки
 ORDER BY c.customer_id ASC, s.sale_date ASC;
-
-
-
