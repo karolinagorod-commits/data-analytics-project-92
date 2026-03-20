@@ -37,8 +37,7 @@ WHERE s.average < (
     SELECT
         AVG(p.price * sa.quantity)
     FROM sales AS sa
-    INNER JOIN products AS p
-        ON sa.product_id = p.product_id
+    INNER JOIN products AS p ON sa.product_id = p.product_id
 )
 ORDER BY s.average ASC;
 
