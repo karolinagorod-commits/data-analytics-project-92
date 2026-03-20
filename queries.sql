@@ -19,8 +19,9 @@ LIMIT 10;
 WITH seller_avg AS (
     SELECT
         TRIM(e.first_name) || ' ' || TRIM(e.last_name) AS seller,
-        -- считаем среднюю выручку за сделку
-        AVG(p.price * s.quantity) AS average
+        AVG(p.price * s.quantity) AS average,
+        -- считаем общее среднее по всем сделкам с помощью оконной функции
+        AVG(AVG(p.price * s.quantity)) OVER () AS total_average
     FROM sales AS s
     INNER JOIN products AS p ON s.product_id = p.product_id
     INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
@@ -31,8 +32,8 @@ SELECT
     seller,
     FLOOR(average) AS average_income
 FROM seller_avg
--- среднее от исходных данных
-WHERE average < (SELECT AVG(price * quantity) FROM sales JOIN products USING(product_id))
+-- выборка продавцов с меньшей средней выручкой
+WHERE average < total_average
 ORDER BY average ASC;
 
 SELECT
