@@ -22,8 +22,8 @@ WITH seller_avg AS (
         -- считаем среднюю выручку за сделку
         AVG(p.price * s.quantity) AS average
     FROM sales AS s
-    INNER JOIN products AS p ON s.product_id = p.product_id
-    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
+        INNER JOIN products AS p ON s.product_id = p.product_id
+        INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
     GROUP BY seller
 )
 
@@ -37,7 +37,7 @@ WHERE s.average < (
     SELECT
         AVG(p.price * sa.quantity)
     FROM sales AS sa
-    INNER JOIN products AS p ON sa.product_id = p.product_id
+        INNER JOIN products AS p ON sa.product_id = p.product_id
 )
 ORDER BY s.average ASC;
 
