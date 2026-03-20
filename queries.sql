@@ -32,13 +32,11 @@ SELECT
     FLOOR(s.average) AS average_income
 FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
-WHERE s.average < (
-    SELECT
-        AVG(p.price * sa.quantity)
-    FROM sales AS sa
-    INNER JOIN products AS p
-        ON sa.product_id = p.product_id
-)
+WHERE s.average < (SELECT
+    AVG(p.price * sa.quantity)
+FROM sales AS sa
+INNER JOIN products AS p
+    ON sa.product_id = p.product_id)
 ORDER BY s.average ASC;
 
 SELECT
