@@ -32,8 +32,8 @@ SELECT
     FLOOR(s.average) AS average_income
 FROM seller_avg AS s
 -- выборка продавцов с меньшей средней выручкой
+-- среднее от исходных данных
 WHERE s.average < (
-    -- среднее от исходных данных
     SELECT
         AVG(p.price * sa.quantity)
     FROM sales AS sa
