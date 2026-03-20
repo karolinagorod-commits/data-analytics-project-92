@@ -22,24 +22,18 @@ WITH seller_avg AS (
         -- считаем среднюю выручку за сделку
         AVG(p.price * s.quantity) AS average
     FROM sales AS s
-        INNER JOIN products AS p ON s.product_id = p.product_id
-        INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
+    INNER JOIN products AS p ON s.product_id = p.product_id
+    INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
     GROUP BY seller
 )
 
 SELECT
-    s.seller,
-    FLOOR(s.average) AS average_income
-FROM seller_avg AS s
--- выборка продавцов с меньшей средней выручкой
+    seller,
+    FLOOR(average) AS average_income
+FROM seller_avg
 -- среднее от исходных данных
-WHERE s.average < (
-    SELECT
-        AVG(p.price * sa.quantity)
-    FROM sales AS sa
-        INNER JOIN products AS p ON sa.product_id = p.product_id
-)
-ORDER BY s.average ASC;
+WHERE average < (SELECT AVG(price * quantity) FROM sales JOIN products USING(product_id))
+ORDER BY average ASC;
 
 SELECT
     TRIM(e.first_name) || ' ' || TRIM(e.last_name) AS seller,
@@ -50,10 +44,7 @@ SELECT
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
 INNER JOIN employees AS e ON s.sales_person_id = e.employee_id
-GROUP BY
-    seller,
-    day_of_week,
-    EXTRACT(ISODOW FROM s.sale_date)
+GROUP BY seller, day_of_week, EXTRACT(ISODOW FROM s.sale_date)
 ORDER BY EXTRACT(ISODOW FROM s.sale_date) ASC, seller ASC;
 
 SELECT
